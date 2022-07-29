@@ -20,6 +20,9 @@ local.properties
 # JDT-specific (Eclipse Java Deveopment Tools)
 .classpath
 
+# tomcat
+Servers
+
 # External tool builders
 .externalToolBuilders/
 
