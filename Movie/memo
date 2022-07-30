@@ -28,8 +28,8 @@
 -- 비회원구매?
 
 장바구니
--- Session을 이용
--- 
+-- DB를 이용
+-- 비회원일 경우 날짜
 
 바로구매
 -- 
@@ -40,4 +40,55 @@
 -- 카테고리는 운영자가 추가시킬 수 있음
 
 =========================== 사용자 ============================
-CREATE TABLE 
+CREATE TABLE BOOK_MEM (
+	MNUM		NUMBER PRIMARY KEY,		-- 코드
+	MID			VARCHAR2(15),			-- 아이디
+	MPW			VARCHAR2(20),			-- 비밀번호
+	MNAME		VARCHAR2(12),			-- 이름
+	MBIRTH		DATE,					-- 생년월일
+	MGENDER		VARCHAR2(3),			-- 성별
+	MEMAIL		VARCHAR2(25),			-- 이메일
+	MPHONE		NUMBER(11),				-- 핸드폰 번호
+	MZIP		VARCHAR2(7)				-- 우편번호
+	MADDRESS	VARCHAR2(100)			-- 집주소
+	REG_DATE	DATE DEFAULT SYSDATE	-- 등록일					
+)
+
+CREATE TABLE BOOK_PRODUCT (
+	PNUM
+	PNAME
+	AUTHOR
+	PUBLISHER
+	PRICE
+	SALE
+	REG_DATE
+)
+
+CREATE TABLE BOOK_REVIEW (
+
+)
+
+CREATE TABLE BOOK_CART (
+	
+)
+
+CREATE TABLE BOOK_ORDERS (
+	
+)
+
+CREATE TABLE BOOK_CATEGORY (
+	CATEGROUP
+	CATECODE
+	CATENAME
+	REG_DATE
+)
+
+INSERT INTO BOOK_CATEGORY (
+	CATEGROUP, 
+)
+
+CREATE TABLE COMMON_CODE (
+	GORUPCODE
+	CODE
+	REG_DATE
+)
