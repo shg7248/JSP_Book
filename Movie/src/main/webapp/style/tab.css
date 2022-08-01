@@ -1,0 +1,38 @@
+.main__inner {
+    width: 950px;
+    margin: 0 auto;
+}
+
+.tab__list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    height: 57px;
+    text-align: center;
+    border-bottom: 1px solid #707070;
+}
+
+.tab__list .on  a {
+    background: white;
+}
+
+.tab__item {
+    position: relative;
+    margin: 0 -1px 0 0;
+    border-top: 1px solid #707070;
+    border-left: 1px solid #707070;
+    border-right: 1px solid #707070;
+}
+
+.tab__item a {
+    display: inline-block;
+    width: 100%;
+    height: calc(57px - 1px);
+    line-height: 57px;
+}
+
+.tab__contents {
+    padding: 10px;
+    font-size: 16px;
+    line-height: 1.5em;
+    text-align: justify;
+}
