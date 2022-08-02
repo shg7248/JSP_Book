@@ -1,5 +1,11 @@
 @charset "UTF-8";
 
+body {
+	display: grid;
+	grid-template-rows: auto auto 1fr auto;
+	min-height: 100%;
+}
+
 .inner {
 	width: 950px;
 	margin: 0 auto;

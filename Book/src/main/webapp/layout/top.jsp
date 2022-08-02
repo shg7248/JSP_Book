@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/layout/common.jsp" %>
-<link rel=stylesheet href="<%=contextPath %>/style/reset.css">
 <link rel=stylesheet href="<%=contextPath %>/style/top.css">
 <header class="header">
 	<div class="header__inner">

@@ -35,9 +35,6 @@ html, body {
 	height: 100%;
 }
 body {
-	display: grid;
-	grid-template-rows: auto auto 1fr auto;
-	min-height: 100%;
 	line-height: 1;
 }
 ol, ul {
