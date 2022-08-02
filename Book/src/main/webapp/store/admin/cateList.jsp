@@ -10,7 +10,7 @@
 </style>
 <script type="text/javascript">
 	function fistCateAdd() {
-		open('firstCateAddForm.jsp', '1차 카테고리 추가', 'width=500; height=500')
+		open('cate_firstInsertForm.jsp', '1차 카테고리 추가', 'width=500; height=500')
 	}	
 </script>
 <main class="main">
