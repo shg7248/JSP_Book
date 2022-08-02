@@ -13,7 +13,7 @@
 					<a href="">로그인</a>
 				</li>
 				<li class="top-nav__item top-nav__item--signup">
-					<a href="">회원가입</a>
+					<a href="<%=contextPath %>/signupType.jsp">회원가입</a>
 				</li>
 				<li class="top-nav__item top-nav__item--help">
 					<a href="">고객센터</a>
@@ -39,7 +39,7 @@
 		<div class="header__logo">
 			<div class="logo">
 				<a href="#" class="logo__link">
-					<img src="images/logo_song 복사.png" alt="학관문고" class="logo__img">
+					<img src="<%=contextPath %>/images/logo_song.png" alt="학관문고" class="logo__img">
 				</a>
 			</div>
 		</div>

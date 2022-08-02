@@ -1,5 +1,10 @@
 @charset "UTF-8";
 
+.inner {
+	width: 950px;
+	margin: 0 auto;
+}
+
 .header__inner {
 	width: 950px;
 	margin: 0 auto;
