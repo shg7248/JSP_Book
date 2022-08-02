@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%
-	String contextPath = request.getContextPath();
-%>
+<%@ include file="/layout/common.jsp" %>
 <link rel=stylesheet href="<%=contextPath %>/style/reset.css">
 <link rel=stylesheet href="<%=contextPath %>/style/top.css">
 <header class="header">
@@ -10,7 +8,7 @@
 		<div class="top-nav">
 			<ul class="top-nav__list">
 				<li class="top-nav__item top-nav__item--signin">
-					<a href="">로그인</a>
+					<a href="<%=contextPath %>/signinForm.jsp">로그인</a>
 				</li>
 				<li class="top-nav__item top-nav__item--signup">
 					<a href="<%=contextPath %>/signupType.jsp">회원가입</a>
