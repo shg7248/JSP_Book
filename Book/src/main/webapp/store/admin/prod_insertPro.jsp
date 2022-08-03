@@ -20,8 +20,8 @@
 	
 	String enctype = "utf-8";
 	
-	MultipartRequest mul = 
-			new MultipartRequest(request, saveDirectory, size, enctype, new DefaultFileRenamePolicy());
+	MultipartRequest mul =  
+			new MultipartRequest(request, saveDirectory, size, enctype, new DefaultFileRenamePolicy()); 
 	
 	ProductBean bean = new ProductBean();
 	bean.setTitle(mul.getParameter("title"));

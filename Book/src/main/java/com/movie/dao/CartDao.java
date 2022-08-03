@@ -38,9 +38,8 @@ public class CartDao {
 		int cnt = -1;
 		
 		try {
-			String sql = "INSERT INTO BOOK_CART (CCODE, PCODE, MCODE, QTY, REG_DATE) "
-					+ "VALUES (?, ?, ?, ?, SYSDATE)";
-			ps = conn.prepareStatement(sql);
+			String sql = "{call CART_UPDATE(?, ?, ?, ?)}";
+			ps = conn.prepareCall(sql);
 			ps.setString(1, bean.getCcode());
 			ps.setInt(2, bean.getPcode());
 			ps.setInt(3, bean.getMcode());
@@ -91,5 +90,25 @@ public class CartDao {
 			ConnectionClose.close(ps);
 		}
 		 return beans;
+	}
+	
+	public int updateMcode(String ccode, String mcode) {
+		
+		int cnt = -1;
+		
+		try {
+			String sql = "UPDATE BOOK_CART SET MCODE = ? WHERE MCODE = 0 AND CCODE = ?";
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, mcode);
+			ps.setString(2, ccode);
+			
+			cnt = ps.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionClose.close(ps);
+		}
+		return cnt;
 	}
 }
