@@ -37,7 +37,9 @@
 	<%
 		for(CartDetailBean bean : beans) {
 			%>
-			<%=bean.getTitle() %><br>
+			<%=bean.getTitle() %>
+			
+			<br>
 			<%
 		}
 	%>

@@ -10,6 +10,7 @@ public class CartDetailBean {
 	private int qty;
 	private int totalPrice;
 	private int totalPoint;
+	private String image;
 	
 	public String getCcode() {
 		return ccode;
@@ -58,5 +59,11 @@ public class CartDetailBean {
 	}
 	public void setTotalPoint(int totalPoint) {
 		this.totalPoint = totalPoint;
+	}
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
 	}
 }
