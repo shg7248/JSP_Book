@@ -56,6 +56,37 @@ public class CartDao {
 		return cnt;
 	}
 	
+//	CREATE OR REPLACE PROCEDURE CART_UPDATE
+//	(
+//		VCCODE BOOK_CART.CCODE%TYPE,
+//		VPCODE BOOK_CART.PCODE%TYPE,
+//		VMCODE VARCHAR2,
+//		VQTY NUMBER
+//	)
+//	IS
+//	CNT NUMBER := 0;
+//	BEGIN
+//
+//	    BEGIN
+//		    SELECT COUNT(*)
+//		    INTO CNT
+//		    FROM BOOK_CART
+//		    GROUP BY CCODE, PCODE
+//		    HAVING CCODE = VCCODE
+//		    AND PCODE = VPCODE;
+//	
+//		    EXCEPTION
+//		        WHEN NO_DATA_FOUND THEN CNT := 0;
+//	    END;
+//
+//	    IF CNT = 0 THEN
+//	    		INSERT INTO BOOK_CART (CCODE, PCODE, MCODE, QTY, REG_DATE)
+//	    		VALUES (VCCODE, VPCODE, VMCODE, VQTY, SYSDATE);
+//	    ELSE
+//	    	UPDATE BOOK_CART SET QTY = QTY + VQTY WHERE CCODE = VCCODE AND PCODE = VPCODE;
+//	    END IF;
+//	END;
+	
 	public ArrayList<CartDetailBean> getCateByCondition(String condition, String value) {
 		
 		 ArrayList<CartDetailBean> beans = new ArrayList<>();
