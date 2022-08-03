@@ -6,7 +6,7 @@
 <jsp:setProperty property="*" name="bean"/>
 <%
 	CategoryDao dao = CategoryDao.getInstance();
-	int cnt = dao.insertFirstCategory(bean);
+	int cnt = dao.insertSecondCategory(bean);
 	
 	String msg = "카테고리가 성공적으로 추가 되었습니다";
 	String type = "pop";

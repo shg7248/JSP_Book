@@ -4,21 +4,21 @@ import java.sql.Timestamp;
 
 public class CategoryBean {
 	
-	private int cateCode;
-	private int cateGroup;
+	private String cateCode;
+	private String cateGroup;
 	private String cateName;
-	private Timestamp date;
+	private Timestamp reg_date;
 	
-	public int getCateCode() {
+	public String getCateCode() {
 		return cateCode;
 	}
-	public void setCateCode(int cateCode) {
+	public void setCateCode(String cateCode) {
 		this.cateCode = cateCode;
 	}
-	public int getCateGroup() {
+	public String getCateGroup() {
 		return cateGroup;
 	}
-	public void setCateGroup(int cateGroup) {
+	public void setCateGroup(String cateGroup) {
 		this.cateGroup = cateGroup;
 	}
 	public String getCateName() {
@@ -27,10 +27,10 @@ public class CategoryBean {
 	public void setCateName(String cateName) {
 		this.cateName = cateName;
 	}
-	public Timestamp getDate() {
-		return date;
+	public Timestamp getReg_date() {
+		return reg_date;
 	}
-	public void setDate(Timestamp date) {
-		this.date = date;
+	public void setReg_date(Timestamp reg_date) {
+		this.reg_date = reg_date;
 	}
 }

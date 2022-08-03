@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -33,6 +34,62 @@ public class CategoryDao {
 		conn = dataSource.getConnection();
 	}
 	
+	public ArrayList<CategoryBean> getAllCategorys() {
+		
+		ArrayList<CategoryBean> beans = new ArrayList<>();
+		
+		try {
+			String sql = "SELECT * FROM BOOK_CATEGORY WHERE CATEGROUP IS NULL";
+			ps = conn.prepareStatement(sql);
+			
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				CategoryBean bean = new CategoryBean();
+				bean.setCateCode(rs.getString("CATECODE"));
+				bean.setCateGroup(rs.getString("CATEGROUP"));
+				bean.setCateName(rs.getString("CATENAME"));
+				bean.setReg_date(rs.getTimestamp("REG_DATE"));
+				beans.add(bean);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionClose.close(ps, rs);
+		}
+		return beans;
+	}
+	
+	public ArrayList<CategoryBean> getAllCategorys(String groupCode) {
+		
+		ArrayList<CategoryBean> beans = new ArrayList<>();
+		
+		try {
+			String sql = "SELECT * FROM BOOK_CATEGORY WHERE CATEGROUP = ?";
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, groupCode);
+			
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				CategoryBean bean = new CategoryBean();
+				bean.setCateCode(rs.getString("CATECODE"));
+				bean.setCateGroup(rs.getString("CATEGROUP"));
+				bean.setCateName(rs.getString("CATENAME"));
+				bean.setReg_date(rs.getTimestamp("REG_DATE"));
+				beans.add(bean);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionClose.close(ps, rs);
+		}
+		
+		return beans;
+	}
+	
 	public int insertFirstCategory(CategoryBean bean) {
 		
 		int cnt = -1;
@@ -40,8 +97,29 @@ public class CategoryDao {
 			String sql = 	"INSERT INTO BOOK_CATEGORY (CATECODE, CATEGROUP, CATENAME, REG_DATE) " +
 							"VALUES(?, NULL, ?, SYSDATE)";
 			ps = conn.prepareStatement(sql);
-			ps.setInt(1, bean.getCateCode());
+			ps.setString(1, bean.getCateCode());
 			ps.setString(2, bean.getCateName());
+			
+			cnt = ps.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionClose.close(ps);
+		}
+		return cnt;
+	}
+	
+	public int insertSecondCategory(CategoryBean bean) {
+		
+		int cnt = -1;
+		try {
+			String sql = 	"INSERT INTO BOOK_CATEGORY (CATECODE, CATEGROUP, CATENAME, REG_DATE) " +
+							"VALUES(?, ?, ?, SYSDATE)";
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, bean.getCateCode());
+			ps.setString(2, bean.getCateGroup());
+			ps.setString(3, bean.getCateName());
 			
 			cnt = ps.executeUpdate();
 			

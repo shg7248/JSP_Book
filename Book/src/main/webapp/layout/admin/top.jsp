@@ -50,6 +50,17 @@
 		background: white;
 		color: #707070;
 	}
+	
+	.nav__item--on a{
+		background: white;
+		color: #707070;
+	}
+	
+	.main__inner {
+        width: 100%;
+        padding-top: 120px;
+        background: rgb(227, 255, 186);
+    }
 </style>
 <div class="wrap">
 <header class="header">
@@ -64,14 +75,14 @@
 		<div class="nav">
 			<strong class="nav__title">관리자 페이지</strong>
 			<ul class="nav__list">
-				<li class="nav__item">
-					<a href="" class="nav__link">카테고리 관리</a>
+				<li class="nav__item nav__item--on">
+					<a href="<%=contextPath %>/store/admin/cateList.jsp" class="nav__link">카테고리 관리</a>
 				</li>
 				<li class="nav__item">
 					<a href="" class="nav__link">회원목록</a>
 				</li>
 				<li class="nav__item">
-					<a href="" class="nav__link">상품정보</a>
+					<a href="<%=contextPath %>/store/admin/prod_List.jsp" class="nav__link">상품정보</a>
 				</li>
 				<li class="nav__item">
 					<a href="" class="nav__link">판매목록</a>
