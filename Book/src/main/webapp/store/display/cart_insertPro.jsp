@@ -6,6 +6,7 @@
     pageEncoding="UTF-8"%>
 <%@ include file="/layout/common.jsp" %>
 <%
+
 	String pcode = request.getParameter("pcode");
 	String qty = request.getParameter("qty");
 

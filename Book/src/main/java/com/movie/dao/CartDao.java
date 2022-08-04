@@ -132,8 +132,8 @@ public class CartDao {
 		int cnt = -1;
 		
 		try {
-			String sql = "UPDATE BOOK_CART SET MCODE = ? WHERE MCODE = 0 AND CCODE = ?";
-			ps = conn.prepareStatement(sql);
+			String sql = "{call CART_UPDATE2(?, ?)}";
+			ps = conn.prepareCall(sql);
 			ps.setString(1, mcode);
 			ps.setString(2, ccode);
 			
@@ -146,4 +146,21 @@ public class CartDao {
 		}
 		return cnt;
 	}
+	
+//	CREATE OR REPLACE PROCEDURE CART_UPDATE2 
+//	(
+//		VMCODE BOOK_MEMBERS.MCODE%TYPE,
+//		VCCODE BOOK_CART.CCODE%TYPE
+//	)
+//	IS
+//	BEGIN
+//		FOR PROD IN (SELECT * FROM BOOK_CART WHERE CCODE = VCCODE) LOOP
+//			FOR P IN (SELECT * FROM BOOK_CART WHERE MCODE = VMCODE AND PCODE = PROD.PCODE) LOOP
+//				UPDATE BOOK_CART SET QTY = QTY + PROD.QTY WHERE MCODE = VMCODE AND PCODE = P.PCODE;
+//				DELETE BOOK_CART WHERE CCODE = VCCODE AND PCODE = PROD.PCODE;
+//			END LOOP;
+//		END LOOP;
+//		
+//		UPDATE BOOK_CART SET MCODE = VMCODE WHERE CCODE = VCCODE AND MCODE = 0;
+//	END;
 }

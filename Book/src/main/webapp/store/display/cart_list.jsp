@@ -14,7 +14,6 @@
 	String condition = null;
 	String value = null;
 	
-	String cookieValue = null;
 	Cookie[] cookies = request.getCookies();
 	for(Cookie cookie : cookies) {
 		if(cookie.getName().equals("ccode")) {
@@ -33,6 +32,13 @@
 		}
 		condition = "mcode";
 		value = String.valueOf(mem.getMcode());
+		
+		// 이후 쿠키 삭제
+		Cookie cookie = new Cookie("ccode", null);
+		cookie.setMaxAge(0);
+		cookie.setPath("/Book");
+		response.addCookie(cookie);
+		System.out.println("쿠키삭제");
 	}
 	
 	ArrayList<CartDetailBean> beans= dao.getCateByCondition(condition, value, is_login);
