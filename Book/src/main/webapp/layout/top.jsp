@@ -6,17 +6,26 @@
 	<div class="header__inner">
 		<div class="top-nav">
 			<ul class="top-nav__list">
-				<li class="top-nav__item top-nav__item--signin">
-					<a href="<%=contextPath %>/signinForm.jsp">로그인</a>
-				</li>
-				<li class="top-nav__item top-nav__item--signup">
-					<a href="<%=contextPath %>/signupType.jsp">회원가입</a>
-				</li>
+				<% if(is_login){ %>
+					<li class="top-nav__item top-nav__item--signout">
+						<a href="<%=contextPath %>/signout.jsp">로그아웃</a>
+					</li>
+					<li class="top-nav__item top-nav__item--signin">
+						<a href="<%=contextPath %>/signinForm.jsp">마이페이지</a>
+					</li>				
+				<% } else { %>
+					<li class="top-nav__item top-nav__item--signin">
+						<a href="<%=contextPath %>/signinForm.jsp">로그인</a>
+					</li>
+					<li class="top-nav__item top-nav__item--signup">
+						<a href="<%=contextPath %>/signupType.jsp">회원가입</a>
+					</li>
+				<% } %>
 				<li class="top-nav__item top-nav__item--help">
 					<a href="">고객센터</a>
 				</li>
 				<li class="top-nav__item top-nav__item--cart">
-					<a href="">장바구니</a>
+					<a href="<%=contextPath %>/store/display/cart_list.jsp">장바구니</a>
 				</li>
 			</ul>
 		</div>
@@ -35,7 +44,7 @@
 		</div>
 		<div class="header__logo">
 			<div class="logo">
-				<a href="#" class="logo__link">
+				<a href="<%=contextPath %>/main.jsp" class="logo__link">
 					<img src="<%=contextPath %>/images/logo_song.png" alt="학관문고" class="logo__img">
 				</a>
 			</div>

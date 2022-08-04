@@ -1,8 +1,17 @@
+<%@page import="com.movie.beans.MemberBean"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
 	request.setCharacterEncoding("utf-8");
 	String contextPath = request.getContextPath();
-	session.setAttribute("mem", 1); // 로그인 되있다고 가정
+	
+	Object obj = session.getAttribute("mem");
+	boolean is_login = obj != null;
+	
+	MemberBean mem = null;
+	if(is_login){
+		mem = (MemberBean) obj;
+	}
 %>
+
 <link rel="stylesheet" href="<%=contextPath %>/style/reset.css">

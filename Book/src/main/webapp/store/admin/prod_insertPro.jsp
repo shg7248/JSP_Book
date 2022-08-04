@@ -20,10 +20,10 @@
 	
 	String enctype = "utf-8";
 	
-	MultipartRequest mul =  
+	MultipartRequest mul =
 			new MultipartRequest(request, saveDirectory, size, enctype, new DefaultFileRenamePolicy()); 
 	
-	ProductBean bean = new ProductBean();
+	ProductBean bean = new ProductBean(); 
 	bean.setTitle(mul.getParameter("title"));
 	bean.setAuthor(mul.getParameter("author"));
 	bean.setPublisher(mul.getParameter("publisher"));

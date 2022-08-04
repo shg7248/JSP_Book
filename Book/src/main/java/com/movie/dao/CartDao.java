@@ -87,17 +87,21 @@ public class CartDao {
 //	    END IF;
 //	END;
 	
-	public ArrayList<CartDetailBean> getCateByCondition(String condition, String value) {
+	public ArrayList<CartDetailBean> getCateByCondition(String condition, String value, boolean is_login) {
 		
 		 ArrayList<CartDetailBean> beans = new ArrayList<>();
 		 
 		 try {
 			 String sql = "SELECT CCODE, MCODE, TITLE, PRICE, SALEPRICE, QTY, TOTALPRICE, TOTALPOINT\r\n"
-			 		+ "FROM(SELECT B.CCODE, B.MCODE, A.TITLE, A.PRICE, A.PRICE * (1 - A.SALE / 100) SALEPRICE, B.QTY, A.PRICE * (A.SALE / 100) * B.QTY TOTALPRICE, A.PRICE * 0.05 TOTALPOINT\r\n"
+			 		+ "FROM(SELECT B.CCODE, B.MCODE, A.TITLE, A.PRICE, A.PRICE * (1 - A.SALE / 100) SALEPRICE, B.QTY, A.PRICE * (1 - A.SALE / 100) * B.QTY TOTALPRICE, A.PRICE * 0.05 * B.QTY TOTALPOINT\r\n"
 			 		+ "FROM BOOK_PRODUCTS A\r\n"
 			 		+ "INNER JOIN BOOK_CART B\r\n"
 			 		+ "ON A.PCODE = B.PCODE\r\n"
 			 		+ ") WHERE " + condition + " = ?";
+			 
+			 if(!is_login) {
+				 sql += "AND MCODE = 0";
+			 }
 			 ps = conn.prepareStatement(sql);
 			 ps.setString(1, value);
 			 

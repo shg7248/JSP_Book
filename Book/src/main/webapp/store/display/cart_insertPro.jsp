@@ -42,11 +42,11 @@
 		bean.setCcode(ccode);
 	}
 	
-	if(session.getAttribute("mem") == null) {
+	if(!is_login) {
 		bean.setMcode(0);
 	}
 	else {
-		bean.setMcode((int) session.getAttribute("mem"));
+		bean.setMcode(mem.getMcode());
 	}
 	
 	CartDao dao = CartDao.getInstance();
