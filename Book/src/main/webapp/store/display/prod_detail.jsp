@@ -15,8 +15,6 @@
 	
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일");
 	Timestamp pub_date = Timestamp.valueOf(bean.getPub_date());
-	
-	DecimalFormat df = new DecimalFormat("###,###");
 %>
 <script>
 	function goCart(url) {

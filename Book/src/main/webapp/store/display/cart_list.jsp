@@ -9,7 +9,6 @@
     pageEncoding="UTF-8"%>
 <%@ include file="/layout/top.jsp" %>
 <%
-	DecimalFormat df = new DecimalFormat("###,###");
 	CartDao dao = CartDao.getInstance();
 	String condition = null;
 	String value = null;

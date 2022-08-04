@@ -20,22 +20,20 @@
 	///////////////////////////////CCODE 생성/////////////////////////////////
 	
 	CartBean bean = new CartBean();
-	bean.setPcode(Integer.parseInt(pcode));
-	bean.setQty(Integer.parseInt(qty));
+	bean.setPcode(Integer.parseInt(pcode)); // 상품코드
+	bean.setQty(Integer.parseInt(qty));		// 상품개수
 	
-	Cookie[] cookies = request.getCookies();
-	
-	boolean flag = false;
+	boolean is_cookie = false;
 	for(Cookie cookie : cookies) {
 		if(cookie.getName().equals("ccode")) {
 			bean.setCcode(cookie.getValue());
-			flag = true;
+			is_cookie = true;
 			break;
 		}
 	}
 	
 	// 쿠키 안에 ccode가 없으면 쿠키를 새로 만듬
-	if(!flag) {
+	if(!is_cookie) {
 		Cookie cookie = new Cookie("ccode", ccode);
 		cookie.setPath(contextPath);
 		cookie.setMaxAge(60 * 60 * 24 * 7); // 7일
@@ -43,10 +41,10 @@
 		bean.setCcode(ccode);
 	}
 	
-	if(!is_login) {
-		bean.setMcode(0);
+	if(!is_login) { 			// 비로그인
+		bean.setMcode(-1);
 	}
-	else {
+	else { 						// 로그인
 		bean.setMcode(mem.getMcode());
 	}
 	
