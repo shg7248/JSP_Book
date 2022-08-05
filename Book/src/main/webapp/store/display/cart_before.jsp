@@ -38,7 +38,9 @@
 		response.addCookie(cookie);
 	}
 	
+	System.out.println("121212121 : " + is_login);
 	if(is_login){
+		System.out.println("여기 들려야되");
 		bean.setMcode(mem.getMcode());
 		bean.setCcode(ccode);
 		dao.mergeCart(bean);

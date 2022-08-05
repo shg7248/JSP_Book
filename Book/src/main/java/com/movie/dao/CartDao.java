@@ -93,37 +93,47 @@ public class CartDao {
 		return cnt;		
 	}
 	
+//	DROP PROCEDURE INERT_CART_DETAIL;
 //	CREATE OR REPLACE PROCEDURE INERT_CART_DETAIL
 //	(
 //		VPCODE BOOK_PRODUCTS.PCODE%TYPE,
 //		VQTY BOOK_CART_DETAIL.QTY%TYPE,
-//		VCCODE BOOK_CART.CCODE%TYPE
+//		VCCODE BOOK_CART.CCODE%TYPE,
+//		VMCODE BOOK_MEMBERS.MCODE%TYPE
 //	)
 //	IS
 //		NUM NUMBER := 0;
 //	BEGIN
-//		SELECT COUNT(*) INTO NUM
-//		FROM BOOK_CART_DETAIL
-//		WHERE CCODE = VCCODE
-//		AND PCODE = VPCODE;
+//		IF VMCODE = -1 THEN
+//			SELECT COUNT(*) INTO NUM
+//			FROM BOOK_CART_DETAIL
+//			WHERE CCODE = VCCODE
+//			AND PCODE = VPCODE;
+//		ELSE
+//			SELECT COUNT(*) INTO NUM
+//			FROM BOOK_CART_DETAIL
+//			WHERE PCODE = VPCODE
+//			AND MCODE = VMCODE;
+//		END IF;
 //		
 //		IF NUM = 0 THEN
-//			INSERT INTO BOOK_CART_DETAIL (PCODE, QTY, CCODE, REG_DATE) VALUES (VPCODE, VQTY, VCCODE, SYSDATE);
+//			INSERT INTO BOOK_CART_DETAIL (PCODE, MCODE, QTY, CCODE, REG_DATE) VALUES (VPCODE, VMCODE, VQTY, VCCODE, SYSDATE);
 //		ELSE
-//			UPDATE BOOK_CART_DETAIL SET QTY = VQTY WHERE CCODE = VCCODE AND PCODE = VPCODE;
+//			IF VMCODE = -1 THEN
+//				UPDATE BOOK_CART_DETAIL SET QTY = VQTY WHERE CCODE = VCCODE AND PCODE = VPCODE;
+//			ELSE
+//				UPDATE BOOK_CART_DETAIL SET QTY = VQTY WHERE PCODE = VPCODE AND MCODE = VMCODE;
+//			END IF;
 //		END IF;
 //	END;
 	
 	public ArrayList<CartDetailBean> getCateByCondition(String condition, String value, boolean is_login) {
 		
 		 ArrayList<CartDetailBean> beans = new ArrayList<>();
-		 System.out.println("condition : " + condition);
-		 System.out.println("value : " + value);
-		 System.out.println("is_login : " + is_login);
 		 
 		 try {
 			 String sql = "SELECT CCODE, MCODE, TITLE, PRICE, SALEPRICE, QTY, TOTALPRICE, TOTALPOINT FROM(\r\n"
-			 		+ "SELECT C2.CCODE, C2.MCODE MCODE, P.TITLE, PRICE, PRICE*(1-SALE/100) SALEPRICE, C.QTY, P.PRICE*(1-SALE/100)*C.QTY TOTALPRICE, P.PRICE*0.05*C.QTY TOTALPOINT\r\n"
+			 		+ "SELECT C2.CCODE, C.MCODE MCODE, P.TITLE, PRICE, PRICE*(1-SALE/100) SALEPRICE, C.QTY, P.PRICE*(1-SALE/100)*C.QTY TOTALPRICE, P.PRICE*0.05*C.QTY TOTALPOINT\r\n"
 			 		+ "FROM BOOK_PRODUCTS P\r\n"
 			 		+ "INNER JOIN BOOK_CART_DETAIL C\r\n"
 			 		+ "ON P.PCODE = C.PCODE\r\n"
@@ -159,15 +169,17 @@ public class CartDao {
 		 return beans;
 	}
 	
-	public int updateMcode(String ccode, String mcode) {
-		
+	public int mergeCart(CartBean bean) {
 		int cnt = -1;
 		
+		System.out.println("ccode" + bean.getCcode());
+		System.out.println("mcode" + bean.getMcode());
+		
 		try {
-			String sql = "{call CART_UPDATE2(?, ?)}";
+			String sql = "{call MERGE_CART(?, ?)}";
 			ps = conn.prepareCall(sql);
-			ps.setString(1, mcode);
-			ps.setString(2, ccode);
+			ps.setInt(1, bean.getMcode());
+			ps.setString(2, bean.getCcode());
 			
 			cnt = ps.executeUpdate();
 			
@@ -179,39 +191,30 @@ public class CartDao {
 		return cnt;
 	}
 	
-//	CREATE OR REPLACE PROCEDURE CART_UPDATE2 
+//	DROP PROCEDURE MERGE_CART;
+//	CREATE OR REPLACE PROCEDURE MERGE_CART
 //	(
 //		VMCODE BOOK_MEMBERS.MCODE%TYPE,
 //		VCCODE BOOK_CART.CCODE%TYPE
 //	)
 //	IS
+//		VPCODE BOOK_PRODUCTS.PCODE%TYPE := 0;
+//		VPCODE2 BOOK_PRODUCTS.PCODE%TYPE := 0;
 //	BEGIN
-//		FOR PROD IN (SELECT * FROM BOOK_CART WHERE CCODE = VCCODE) LOOP
-//			FOR P IN (SELECT * FROM BOOK_CART WHERE MCODE = VMCODE AND PCODE = PROD.PCODE) LOOP
-//				UPDATE BOOK_CART SET QTY = QTY + PROD.QTY WHERE MCODE = VMCODE AND PCODE = P.PCODE;
-//				DELETE BOOK_CART WHERE CCODE = VCCODE AND PCODE = PROD.PCODE;
-//			END LOOP;
+//		FOR F1 IN (SELECT * FROM BOOK_CART_DETAIL WHERE CCODE = VCCODE AND MCODE = -1) LOOP
+//			VPCODE2 := F1.PCODE;
+//			BEGIN
+//				SELECT NVL(MAX(PCODE), 0) INTO VPCODE FROM BOOK_CART_DETAIL WHERE MCODE = VMCODE AND PCODE = F1.PCODE;
+//				
+//				EXCEPTION
+//					WHEN NO_DATA_FOUND THEN VPCODE := 0;
+//			END;
+//			
+//			IF VPCODE = 0 THEN
+//				UPDATE BOOK_CART_DETAIL SET MCODE = VMCODE WHERE CCODE = VCCODE AND MCODE = -1 AND PCODE = VPCODE2;
+//			ELSE
+//				DELETE FROM BOOK_CART_DETAIL WHERE CCODE = VCCODE AND MCODE = -1 AND PCODE = VPCODE;
+//			END IF;
 //		END LOOP;
-//		
-//		UPDATE BOOK_CART SET MCODE = VMCODE WHERE CCODE = VCCODE AND MCODE = 0;
 //	END;
-	
-	public int mergeCart(CartBean bean) {
-		int cnt = -1;
-		
-		try {
-			String sql = "{call MERGE_CART(?, ?)}";
-			ps = conn.prepareCall(sql);
-			ps.setString(2, bean.getCcode());
-			ps.setInt(1, bean.getMcode());
-			
-			cnt = ps.executeUpdate();
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			ConnectionClose.close(ps);
-		}
-		return cnt;
-	}
 }

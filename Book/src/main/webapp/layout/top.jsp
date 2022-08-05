@@ -11,7 +11,7 @@
 			body: JSON.stringify([])
 		})
 		.then(function() {
-			location.href= getContextPath() + "/store/display/cart_ist.jsp";
+			location.href= getContextPath() + "/store/display/cart_list.jsp";
 		})
 	}
 	
@@ -44,7 +44,7 @@
 					<a href="">고객센터</a>
 				</li>
 				<li class="top-nav__item top-nav__item--cart">
-					<a href="<%=contextPath %>/store/display/cart_list.jsp">장바구니</a>
+					<a href="javascript:goCart()">장바구니</a>
 				</li>
 			</ul>
 		</div>

@@ -35,7 +35,6 @@
 		cookie.setMaxAge(0);
 		cookie.setPath("/Book");
 		response.addCookie(cookie);
-		System.out.println("쿠키삭제");
 	}
 	
 	ArrayList<CartDetailBean> beans= dao.getCateByCondition(condition, value, is_login);
