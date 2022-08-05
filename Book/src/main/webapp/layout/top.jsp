@@ -1,6 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/layout/common.jsp" %>
+<script type="text/javascript">
+	function goCart() {
+		fetch(getContextPath() + "/store/display/cart_before.jsp", {
+			method: "post",
+			header: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify([])
+		})
+		.then(function() {
+			location.href= getContextPath() + "/store/display/cart_ist.jsp";
+		})
+	}
+	
+	function getContextPath() {
+		  var hostIndex = location.href.indexOf( location.host ) + location.host.length;
+		  return location.href.substring( hostIndex, location.href.indexOf('/', hostIndex + 1) );
+	};
+</script>
 <link rel=stylesheet href="<%=contextPath %>/style/top.css">
 <header class="header">
 	<div class="header__inner">

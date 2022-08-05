@@ -10,6 +10,7 @@
     pageEncoding="UTF-8"%>
 <%@ include file="/layout/common.jsp" %>
 <%
+	CartBean bean = new CartBean();
 	CartDao dao = CartDao.getInstance();
 
 	boolean is_cookie = false; // true : 쿠키가 있다, false : 쿠키가 없다
@@ -37,13 +38,18 @@
 		response.addCookie(cookie);
 	}
 	
-	// 카트에 담는 데이터를 보낼 경우 넣는다
+	if(is_login){
+		bean.setMcode(mem.getMcode());
+		bean.setCcode(ccode);
+		dao.mergeCart(bean);
+	}
+	
 	BufferedReader br = request.getReader();
 	JSONParser parser = new JSONParser(br);
 	ArrayList<Object> lists = parser.list();
 	
+	// 카트에 담는 데이터를 보낼 경우 넣는다
 	if(lists.size() > 0) {
-		CartBean bean = new CartBean();
 		bean.setCcode(ccode);
 		
 		if(is_login) {
@@ -63,6 +69,9 @@
 			bean.setQty(qty);
 			dao.insertCartDetail(bean);
 		}
+	}
+	else {
+		
 	}
 	
 %>

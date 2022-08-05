@@ -195,4 +195,23 @@ public class CartDao {
 //		
 //		UPDATE BOOK_CART SET MCODE = VMCODE WHERE CCODE = VCCODE AND MCODE = 0;
 //	END;
+	
+	public int mergeCart(CartBean bean) {
+		int cnt = -1;
+		
+		try {
+			String sql = "{call MERGE_CART(?, ?)}";
+			ps = conn.prepareCall(sql);
+			ps.setString(2, bean.getCcode());
+			ps.setInt(1, bean.getMcode());
+			
+			cnt = ps.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionClose.close(ps);
+		}
+		return cnt;
+	}
 }
