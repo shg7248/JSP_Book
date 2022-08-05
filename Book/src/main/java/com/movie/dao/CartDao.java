@@ -35,15 +35,14 @@ public class CartDao {
 	}
 	
 	public int insertCart(CartBean bean) {
+		
 		int cnt = -1;
 		
 		try {
-			String sql = "{call CART_UPDATE(?, ?, ?, ?)}";
+			String sql = "{call INSERT_CART(?, ?)}";
 			ps = conn.prepareCall(sql);
 			ps.setString(1, bean.getCcode());
-			ps.setInt(2, bean.getPcode());
-			ps.setInt(3, bean.getMcode());
-			ps.setInt(4, bean.getQty());
+			ps.setInt(2, bean.getMcode());
 			
 			cnt = ps.executeUpdate();
 			
@@ -52,55 +51,88 @@ public class CartDao {
 		} finally {
 			ConnectionClose.close(ps);
 		}
-		
 		return cnt;
 	}
 	
-//	CREATE OR REPLACE PROCEDURE CART_UPDATE
+//	CREATE OR REPLACE PROCEDURE INSERT_CART
 //	(
 //		VCCODE BOOK_CART.CCODE%TYPE,
-//		VPCODE BOOK_CART.PCODE%TYPE,
-//		VMCODE VARCHAR2,
-//		VQTY NUMBER
+//		VMCODE BOOK_MEMBERS.MCODE%TYPE
 //	)
 //	IS
-//	CNT NUMBER := 0;
+//		NUM NUMBER := 0;
 //	BEGIN
-//
-//	    BEGIN
-//		    SELECT COUNT(*)
-//		    INTO CNT
-//		    FROM BOOK_CART
-//		    GROUP BY CCODE, PCODE
-//		    HAVING CCODE = VCCODE
-//		    AND PCODE = VPCODE;
-//	
-//		    EXCEPTION
-//		        WHEN NO_DATA_FOUND THEN CNT := 0;
-//	    END;
-//
-//	    IF CNT = 0 THEN
-//	    		INSERT INTO BOOK_CART (CCODE, PCODE, MCODE, QTY, REG_DATE)
-//	    		VALUES (VCCODE, VPCODE, VMCODE, VQTY, SYSDATE);
-//	    ELSE
-//	    	UPDATE BOOK_CART SET QTY = QTY + VQTY WHERE CCODE = VCCODE AND PCODE = VPCODE;
-//	    END IF;
+//		SELECT COUNT(*) INTO NUM
+//		FROM BOOK_CART
+//		WHERE CCODE = VCCODE
+//		AND MCODE = VMCODE;
+//		
+//		IF NUM = 0 THEN
+//			INSERT INTO BOOK_CART (CCODE, MCODE, REG_DATE) VALUES (VCCODE, VMCODE, SYSDATE);
+//		END IF;
+//	END;
+	
+	public int insertCartDetail(CartBean bean) {
+		int cnt = -1;
+		
+		try {
+			String sql = "{call INERT_CART_DETAIL(?, ?, ?, ?)}";
+			ps = conn.prepareCall(sql);
+			ps.setInt(1, bean.getPcode());
+			ps.setInt(2, bean.getQty());
+			ps.setString(3, bean.getCcode());
+			ps.setInt(4, bean.getMcode());
+			
+			cnt = ps.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionClose.close(ps);
+		}
+		return cnt;		
+	}
+	
+//	CREATE OR REPLACE PROCEDURE INERT_CART_DETAIL
+//	(
+//		VPCODE BOOK_PRODUCTS.PCODE%TYPE,
+//		VQTY BOOK_CART_DETAIL.QTY%TYPE,
+//		VCCODE BOOK_CART.CCODE%TYPE
+//	)
+//	IS
+//		NUM NUMBER := 0;
+//	BEGIN
+//		SELECT COUNT(*) INTO NUM
+//		FROM BOOK_CART_DETAIL
+//		WHERE CCODE = VCCODE
+//		AND PCODE = VPCODE;
+//		
+//		IF NUM = 0 THEN
+//			INSERT INTO BOOK_CART_DETAIL (PCODE, QTY, CCODE, REG_DATE) VALUES (VPCODE, VQTY, VCCODE, SYSDATE);
+//		ELSE
+//			UPDATE BOOK_CART_DETAIL SET QTY = VQTY WHERE CCODE = VCCODE AND PCODE = VPCODE;
+//		END IF;
 //	END;
 	
 	public ArrayList<CartDetailBean> getCateByCondition(String condition, String value, boolean is_login) {
 		
 		 ArrayList<CartDetailBean> beans = new ArrayList<>();
+		 System.out.println("condition : " + condition);
+		 System.out.println("value : " + value);
+		 System.out.println("is_login : " + is_login);
 		 
 		 try {
-			 String sql = "SELECT CCODE, MCODE, TITLE, PRICE, SALEPRICE, QTY, TOTALPRICE, TOTALPOINT\r\n"
-			 		+ "FROM(SELECT B.CCODE, B.MCODE, A.TITLE, A.PRICE, A.PRICE * (1 - A.SALE / 100) SALEPRICE, B.QTY, A.PRICE * (1 - A.SALE / 100) * B.QTY TOTALPRICE, A.PRICE * 0.05 * B.QTY TOTALPOINT\r\n"
-			 		+ "FROM BOOK_PRODUCTS A\r\n"
-			 		+ "INNER JOIN BOOK_CART B\r\n"
-			 		+ "ON A.PCODE = B.PCODE\r\n"
+			 String sql = "SELECT CCODE, MCODE, TITLE, PRICE, SALEPRICE, QTY, TOTALPRICE, TOTALPOINT FROM(\r\n"
+			 		+ "SELECT C2.CCODE, C2.MCODE MCODE, P.TITLE, PRICE, PRICE*(1-SALE/100) SALEPRICE, C.QTY, P.PRICE*(1-SALE/100)*C.QTY TOTALPRICE, P.PRICE*0.05*C.QTY TOTALPOINT\r\n"
+			 		+ "FROM BOOK_PRODUCTS P\r\n"
+			 		+ "INNER JOIN BOOK_CART_DETAIL C\r\n"
+			 		+ "ON P.PCODE = C.PCODE\r\n"
+			 		+ "INNER JOIN BOOK_CART C2\r\n"
+			 		+ "ON C2.CCODE = C.CCODE\r\n"
 			 		+ ") WHERE " + condition + " = ?";
 			 
 			 if(!is_login) {
-				 sql += "AND MCODE = 0";
+				 sql += "AND MCODE = -1";
 			 }
 			 ps = conn.prepareStatement(sql);
 			 ps.setString(1, value);

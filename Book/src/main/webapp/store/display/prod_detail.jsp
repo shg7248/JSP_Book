@@ -17,10 +17,24 @@
 	Timestamp pub_date = Timestamp.valueOf(bean.getPub_date());
 %>
 <script>
-	function goCart(url) {
-		const form = window.document.myform;
-		form.action = url;
-		form.submit();
+	function goCart(pcode, qty) {
+		const data = []
+		const obj = {pcode: pcode, qty: qty};
+		data.push(obj);
+		
+		fetch("cart_before.jsp", {
+			method: "post",
+			header: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify(data)
+		})
+		.then(function(data) {
+			const yn = confirm("성공적으로 장바구니에 들어갔습니다.\n장바구니로 이동하시겠습니까?");
+			if(yn) {
+				location.href="cart_list.jsp"
+			}
+		})
 	}
 </script>
 <style type="text/css">
@@ -100,7 +114,7 @@
 							<input type="button" value="-">
 						</li>
 						<li class="prod-info__item prod-info__item--order">
-							<input type="button" value="장바구니" onclick="goCart('<%=contextPath %>/store/display/cart_insertPro.jsp')">
+							<input type="button" value="장바구니" onclick="goCart(pcode.value, qty.value)">
 							<input type="button" value="즉시결제" >
 						</li>
 					</ul>

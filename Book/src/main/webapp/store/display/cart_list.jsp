@@ -13,7 +13,6 @@
 	String condition = null;
 	String value = null;
 	
-	Cookie[] cookies = request.getCookies();
 	for(Cookie cookie : cookies) {
 		if(cookie.getName().equals("ccode")) {
 			value = cookie.getValue();
@@ -27,7 +26,6 @@
 	else { // 회원일 경우
 		if(value != null) { // ccode라는 쿠키가 있을 경우 MCODE를 회원의 MCODE로 업데이트
 			String mcode = String.valueOf(mem.getMcode());
-			dao.updateMcode(value, mcode);
 		}
 		condition = "mcode";
 		value = String.valueOf(mem.getMcode());
