@@ -128,7 +128,7 @@
 		const check = /^(?=.*\d)(?=.*[a-z])(?=.*[~!@#$%^&*()+|=])[a-z\d~!@#$%^&*()+|=]{10,}$/.test(value);
 		if(check) {
 			div.classList.add("auth-ok");
-			div.innerHTML = "사용 가능한 비밀번호 입니다";
+			div.innerHTML = "사용 가능한 비밀번호 입니다.";
 			document.querySelector(".auth-pwd").append(div);
 			pwdc = true;			
 		}

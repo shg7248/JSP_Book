@@ -4,7 +4,8 @@
 <%@ include file="/layout/common.jsp" %>
 <%
 	String[][] msgArray = {
-			{"회원님 환영합니다", "정보를 잘못 입력하셨습니다"}
+			{"회원님 환영합니다", "정보를 잘못 입력하셨습니다"},
+			{"1차 카테고리가 추가되었습니다", "2차 카테고리가 추가되었습니다"}
 	};
 
 	String msg = request.getParameter("msg");
@@ -19,7 +20,10 @@
 	System.out.println(type);
 	if(type.equals("pop")) {
 %>
-	<script>window.opener.location.reload(true)</script>
+	<script>
+		window.opener.location.reload(true);
+		window.self.close();
+	</script>
 <%
 	}
 	else {

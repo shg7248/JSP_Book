@@ -9,11 +9,8 @@
 	HashMap<String, Object> map = parser.object();
 	String mid = String.valueOf(map.get("mid"));
 	
-	System.out.println(mid);
-	
 	MemberDao dao = MemberDao.getInstance();
 	boolean is_mcode = dao.isMemberCode(mid);
 	
-	System.out.println("{\"data\":\"" + is_mcode + "\"}");
 	out.print("{\"data\":\"" + is_mcode + "\"}");
 %>

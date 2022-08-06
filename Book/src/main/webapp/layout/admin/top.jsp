@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/layout/common.jsp" %>
+<%
+	String filename = request.getRequestURI().replace(contextPath + "/store/admin/", "");
+%>
 <style>
 	.wrap {
 		width: 950px;
@@ -51,7 +54,7 @@
 		color: #707070;
 	}
 	
-	.nav__item--on a{
+	.nav__item.on a{
 		background: white;
 		color: #707070;
 	}
@@ -59,7 +62,9 @@
 	.main__inner {
         width: 100%;
         padding-top: 120px;
-        background: rgb(227, 255, 186);
+        padding-top: 120px;
+        padding-left: 20px;
+        padding-right: 20px;
     }
 </style>
 <div class="wrap">
@@ -75,13 +80,13 @@
 		<div class="nav">
 			<strong class="nav__title">관리자 페이지</strong>
 			<ul class="nav__list">
-				<li class="nav__item nav__item--on">
+				<li class="nav__item <%if (filename.equals("cateList.jsp")) { %>on<% } %>">
 					<a href="<%=contextPath %>/store/admin/cateList.jsp" class="nav__link">카테고리 관리</a>
 				</li>
-				<li class="nav__item">
+				<li class="nav__item <%if (filename.equals("dsfdsf")) { %>on<% } %>">
 					<a href="" class="nav__link">회원목록</a>
 				</li>
-				<li class="nav__item">
+				<li class="nav__item <%if (filename.equals("prod_List.jsp") || filename.equals("prod_insertForm.jsp")) { %>on<% } %>">
 					<a href="<%=contextPath %>/store/admin/prod_List.jsp" class="nav__link">상품정보</a>
 				</li>
 				<li class="nav__item">

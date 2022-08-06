@@ -5,26 +5,32 @@
 	String referer = request.getHeader("referer");
 %>
 <style>
-	table {
+	.signin-table {
 		width: 40%;
 		margin: 0 auto;
 	}
-	
-	table strong {
-		
+	.signin-table td{
+		padding-bottom: 10px;
 	}
-	
-	talbe th, table td{
-		
+	.signin-table__sub-title {
+		font-size: 20px;
+		font-weight: bold;
 	}
-	
-	table th {
-		font-size: 14px;
+	.signin-table__link, .link-gubun {
+		font-size: 12px;
+	}
+	.signin-table__submit {
+		position: absolute;
+		width: 50px;
+		height: 50px;
+		top: -30px;
+		left: -60px;
+		font-size: 10px;
 	}
 </style>
 <script>
-	function loginCheck() {
-		const form = window.document.memLogin_form;
+	function loginCheck(url) {
+		const form = window.document.forms[0];
 		const id = form.id;
 		const pwd = form.pwd;
 		
@@ -39,64 +45,63 @@
 			pwd.focus();
 			return false;
 		}
+		
+		form.action = url;
+		form.submit();
 	}
 </script>
-<main class="main">
-	<div class="main__inner">
-		<form method="post" name="memLogin_form" class="main__memLogin-form" action="<%=contextPath %>/signinPro.jsp">
+<main class=main>
+	<div class=main__inner>
+		<form class=signin-form method=post>
 			<input type="hidden" name="referer" value="<%=referer %>">
-			<table border=1>
+			<table class=signin-table>
+				<tr class="signin-table__sub-title">
+					<th colspan=3>회원 로그인</th>
+				</tr>
+				<tr height=20>
+					<td></td>
+				</tr>
+				<tr>
+					<td>아이디</td>
+					<td colspan=2>
+						<input type=text name="id"/>
+					</td>
+				</tr>
+				<tr>
+					<td>비밀번호</td>
+					<td><input type="password" name="pwd"/></td>
+					<td style="position: relative;">
+						<input class="signin-table__submit" type="submit" value="로그인" onclick="return loginCheck('<%=contextPath %>/signinPro.jsp')"/>
+					</td>
+				</tr>
 				<tr>
 					<td colspan=3>
-						<strong>회원 로그인</strong>
+						<a class=signin-table__link href=>아이디찾기</a>
+						<span class="link-gubun"> | </span> 
+						<a class=signin-table__link href=>비밀번호 찾기</a>
 					</td>
 				</tr>
-				<tr>
-					<td colspan=3 height=20></td>
+				<tr height=60>
+					<td colspan=3></td>
+				</tr>
+				<tr class=signin-table__sub-title>
+					<th colspan=3>비회원 상품조회</th>
+				</tr>
+				<tr height=20>
+					<td></td>
 				</tr>
 				<tr>
-					<th>아이디</th>
-					<td colspan=2 class="">
-						<input type="text" name="id">
-					</td>
+					<td>주문 비밀번호</td>
+					<td colspan=2><input type="text"/></td>
 				</tr>
 				<tr>
-					<th>비밀번호</th>
-					<td>
-						<input type="password" name="pwd">
-					</td>
-					<td rowspan=2>
-						<input type="submit" value="로그인" onclick="return loginCheck()">
-					</td>
+					<td>이메일</td>
+					<td><input type="text"/></td>
+					<td style="position: relative;"><input class="signin-table__submit" type="submit" value="조회"/></td>
 				</tr>
-				<tr>
-					<td colspan=3>아이디찾기 | 비밀번호 찾기</td>
-				</tr>
-			</table>
-		</form>
-		<hr>
-		<form class="main__nomemSearch-form">
-			<table>
 				<tr>
 					<td colspan=3>
-						<strong>비회원 상품조회</strong>
-					</td>
-				</tr>
-				<tr>
-					<td colspan=3 height=20></td>
-				</tr>
-				<tr>
-					<th>주문 비밀번호</th>
-					<td><input type="text" name="id"></td>
-					<td rowspan=3><input type="submit" value="로그인"></td>
-				</tr>
-				<tr>
-					<th rowspan=2>이메일</th>
-					<td><input type="password" name="pwd"></td>
-				</tr>
-				<tr>
-					<td>
-						<a href="<%=contextPath %>/signupType.jsp">회원가입</a>
+						<a class=signin-table__link href="<%=contextPath %>/signupType.jsp">회원가입</a>
 					</td>
 				</tr>
 			</table>

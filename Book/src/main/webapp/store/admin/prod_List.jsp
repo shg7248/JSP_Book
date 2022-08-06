@@ -6,14 +6,15 @@
     pageEncoding="UTF-8"%>
 <%@ include file="/layout/admin/top.jsp"%>
 <%
+	String condition = request.getParameter("condition");
+	String value = request.getParameter("value");
+
 	ProductDao dao = ProductDao.getInstance();
-	int size = dao.getAllProductSize();
 	
-	Paging paging = new Paging(10, 10);
-	paging.setBoardSize(size);
+	Paging paging = new Paging(10, 10, dao);
 	
 	ArrayList<ProductBean> beans = dao.getAllProduct(paging);
-	
+	System.out.println(beans.size());
 	
 %>
 <main class="main">

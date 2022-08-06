@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 import com.movie.beans.ProductBean;
 import com.movie.util.Paging;
 
-public class ProductDao {
+public class ProductDao implements Dao {
 
 	private Connection conn = null;
 	private PreparedStatement ps = null;
@@ -32,6 +32,29 @@ public class ProductDao {
 		Context envinit = (Context) initContext.lookup("java:comp/env");
 		DataSource dataSource = (DataSource) envinit.lookup("jdbc/OracleDB");
 		conn = dataSource.getConnection();
+	}
+	
+	@Override
+	public int getCount() {
+		int cnt = -1;
+		
+		try {
+			String sql = "SELECT COUNT(*) FROM BOOK_PRODUCTS";
+			ps = conn.prepareStatement(sql);
+			
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				cnt = rs.getInt(1);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionClose.close(ps, rs);
+		}
+		
+		return cnt; 
 	}
 	
 	public int insertProduct(ProductBean bean) {
@@ -62,30 +85,6 @@ public class ProductDao {
 			ConnectionClose.close(ps);
 		}
 		return cnt;
-	}
-	
-	// 상품의 전체 갯수 리턴
-	public int getAllProductSize() {
-		
-		int cnt = -1;
-		
-		try {
-			String sql = "select count(*) from product";
-			ps = conn.prepareStatement(sql);
-			
-			rs = ps.executeQuery();
-			
-			if(rs.next()) {
-				cnt = rs.getInt(1);
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			ConnectionClose.close(ps, rs);
-		}
-		
-		return cnt; 
 	}
 	
 	public ArrayList<ProductBean> getAllProduct(Paging paging) {

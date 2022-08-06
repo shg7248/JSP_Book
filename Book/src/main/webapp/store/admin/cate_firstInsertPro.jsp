@@ -8,7 +8,7 @@
 	CategoryDao dao = CategoryDao.getInstance();
 	int cnt = dao.insertFirstCategory(bean);
 	
-	String msg = "카테고리가 성공적으로 추가 되었습니다";
+	String msg = "1 0";
 	String type = "pop";
 	response.sendRedirect(contextPath + "/response.jsp?type=" + type + "&msg=" + msg);
 %>

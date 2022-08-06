@@ -1,21 +1,28 @@
 package com.movie.util;
 
+import com.movie.dao.Dao;
+
 public class Paging {
 
+	Dao dao;
+	
     private int pageSize;
     private int pageBlock;
     private int currentPage;
     private int boardSize;
     private int pageCount;
 
-    public Paging(int pageSize, int pageBlock) {
-        this(pageSize, pageBlock, 1);
+    public Paging(int pageSize, int pageBlock, Dao dao) {
+        this(pageSize, pageBlock, dao, 1);
     }
 
-    public Paging(int pageSize, int pageBlock, int currentPage) {
+    public Paging(int pageSize, int pageBlock, Dao dao, int currentPage) {
         this.pageSize = pageSize;
         this.pageBlock = pageBlock;
+        this.dao = dao;
         this.currentPage = currentPage;
+        setBoardSize();
+        setPageCount();
     }
 
     public int getStart() {
@@ -25,10 +32,9 @@ public class Paging {
     public int getEnd() {
         return currentPage * pageSize;
     }
-
-    public void setBoardSize(int boardSize) {
-        this.boardSize = boardSize;
-        setPageCount();
+    
+    private void setBoardSize() {
+    	this.boardSize = dao.getCount();
     }
 
     private void setPageCount() {
