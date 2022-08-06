@@ -1,13 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ include file="/layout/common.jsp" %>
+<%@ include file="/layout/signupin/top.jsp" %>
 <style>
-
-	.logo {
-		text-align: center;
-		margin: 195px 0 50px 0;
-	}
-
 	input::placeholder {
 		opacity: .5;
 	}
@@ -18,7 +12,7 @@
 	}
 	.auth-form {
 		display: grid;
-		grid-template-rows: repeat(1fr);
+		grid-template-rows: repeat(4, 1fr);
 		row-gap: 50px;
 	}
 	
@@ -47,10 +41,20 @@
 	
 	.auth-form__gender {
 		position: relative;
+		display: inline-block;
 		width: 49px;
 		height: 49px;
-		top: 20px;
-		margin-top: -20px;
+		top: 2px;
+		text-align: center;
+		border: 1px solid black;
+		line-height: 49px;
+	}
+	.auth-form__gender:hover {
+		cursor: pointer;
+	}
+	.auth-form__gender.on {
+		background: #4093F1;
+		color: white;
 	}
 	
 	.auth-form__phone {
@@ -164,11 +168,6 @@
 	}
 </script>
 <main class="main">
-	<div class="main__logo">
-		<div class="logo">
-			<img src="<%=contextPath %>/images/logo_song.png">
-		</div>
-	</div>
 	<div class="main_auth">
 		<div class="auth">
 			<div class="auth__inner">
@@ -180,8 +179,10 @@
 					<div class="auth-form__item">
 						<div class="auth-form__title">생년월일 / 성별</div>
 						<input type="text" name="birth" class="auth-form__birth auth-form__text" placeholder="19901001">
-						<input type="radio" name="gender" class="auth-form__gender auth-form__gender--man" value="남"/>
-						<input type="radio" name="gender" class="auth-form__gender auth-form__gender--woman" value="여"/>
+						<input type="radio" id="gender-man" name="gender" class="auth-form__gender--man" value="남" style="display: none;" checked/>
+						<label for="gender-man" class="auth-form__gender gender on">남</label>
+						<input type="radio" id="gender-woman" name="gender" class="auth-form__gender--woman" value="여" style="display: none;"/>
+						<label for="gender-woman" class="auth-form__gender gender">여</label>
 					</div>
 					<div class="auth-form__item">
 						<div class="auth-form__title">휴대폰 번호</div>
@@ -196,3 +197,11 @@
 		</div>
 	</div>
 </main>
+<script>
+	document.querySelectorAll(".gender").forEach(function(ele, i) {
+		ele.addEventListener("click", function(event) {
+			document.querySelector(".auth-form__item .on").classList.remove("on");
+			event.target.classList.add("on");
+		})
+	});
+</script>

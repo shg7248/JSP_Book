@@ -91,4 +91,27 @@ public class MemberDao {
 		
 		return bean;
 	}
+	
+	public boolean isMemberCode(String mid) {
+		
+		boolean is_mcode = false;
+		
+		try {
+			String sql = "SELECT COUNT(*) FROM BOOK_MEMBERS WHERE ID = ?";
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, mid);
+			
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				if( rs.getInt(1) > 0) {
+					is_mcode = true;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionClose.close(ps, rs);
+		}
+		return is_mcode;
+	}
 }

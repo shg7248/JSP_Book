@@ -1,18 +1,30 @@
+<%@page import="java.net.URLDecoder"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/layout/common.jsp" %>
 <%
+	String[][] msgArray = {
+			{"회원님 환영합니다", "정보를 잘못 입력하셨습니다"}
+	};
+
 	String msg = request.getParameter("msg");
 	String url = request.getParameter("url");
 	String type = request.getParameter("type");
 	
-	out.print("<script>alert('" + msg + "')</script>");
-	
+	String[] sdf = msg.split(" ");
+	String mmsg = msgArray[Integer.parseInt(sdf[0])][Integer.parseInt(sdf[1])];
+%>
+	<script>alert('<%=mmsg %>')</script>
+<%
+	System.out.println(type);
 	if(type.equals("pop")) {
-		out.print("<script>window.opener.location.reload(true)</script>");
-		out.print("<script>window.self.close()</script>");
+%>
+	<script>window.opener.location.reload(true)</script>
+<%
 	}
 	else {
-		response.sendRedirect(contextPath + "/" + url);
+%>
+	<script>location.href="<%=contextPath +  "/" + url%>"</script>
+<%
 	}
 %>

@@ -34,6 +34,12 @@
             top: 0;
             left: 0;
         }
+        
+        .gender.on {
+        	width: 50px;
+        	height: 50px;
+        	background-color: blue;
+        }
     </style>
 </head>
 <body>
@@ -42,8 +48,20 @@
             sdfsdf<br>sdfsdf<br>sdfsdf<br>sdfsdf<br>sdfsdf<br>sdfsdf<br>sdfsdf<br>sdfsdf<br>
         </div>
         <div class="main">
-            sdfsdf<br>sdfsdf<br>
+        	<label for="gender_man" class="gender_man gender on">남</label>
+            <input type="radio" id="gender_man" name="gender" checked/>
+            
+            <label for="gender_woman" class="gender_woman gender">여</label>
+            <input type="radio" id="gender_woman" name="gender"/>
         </div>
     </div>
 </body>
+<script>
+	document.querySelectorAll(".gender").forEach(function(v, i) {
+		v.addEventListener("click", function(evnet) {
+			document.querySelector(".on").classList.remove("on");
+			event.target.classList.add("on");
+		})
+	});
+</script>
 </html>

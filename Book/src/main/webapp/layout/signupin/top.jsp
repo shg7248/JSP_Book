@@ -48,7 +48,11 @@
 			</div>
 		</div>
 		<div class="header__logo">
-			<img src="<%=contextPath %>/images/logo_song.png">
+			<div class="logo">
+				<a class="logo__link" href="<%=contextPath %>/main.jsp">
+					<img class="logo__img" src="<%=contextPath %>/images/logo_song.png">
+				</a>
+			</div>
 		</div>
 	</div>
 </header>
