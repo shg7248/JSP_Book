@@ -1,7 +1,5 @@
 package com.movie.beans;
 
-import java.sql.Timestamp;
-
 public class ProductBean {
 
 	private int pcode;

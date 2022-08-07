@@ -25,6 +25,11 @@
 		url = "signinForm.jsp";
 		type = "normal";
 	}
+	else if(bean.getId().equals("admin")) {
+		msg = "0 2";
+		url = "store/admin/cateList.jsp";
+		type = "normal";			
+	}
 	else {
 		session.setAttribute("mem", bean);
 		msg = "0 0";

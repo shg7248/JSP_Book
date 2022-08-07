@@ -24,6 +24,7 @@
 			new MultipartRequest(request, saveDirectory, size, enctype, new DefaultFileRenamePolicy()); 
 	
 	ProductBean bean = new ProductBean(); 
+	bean.setPcode(Integer.parseInt(mul.getParameter("pcode")));
 	bean.setTitle(mul.getParameter("title"));
 	bean.setAuthor(mul.getParameter("author"));
 	bean.setPublisher(mul.getParameter("publisher"));
@@ -41,14 +42,14 @@
 	bean.setContent(mul.getParameter("content"));
 	bean.setImage(mul.getFilesystemName("image"));
 	
-	int cnt = dao.insertProduct(bean);
-	System.out.println(cnt);
+ 	int cnt = dao.updateProduct(bean);
+ 	System.out.println(cnt);
 	
 	String msg = null;
 	String url = null;
 	String type = null;
 	if(cnt > 0) {
-		msg = "2 0";
+		msg = "2 1";
 		url = "store/admin/prod_List.jsp";
 		type = "normal";
 		

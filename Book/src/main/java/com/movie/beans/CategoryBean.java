@@ -7,6 +7,7 @@ public class CategoryBean {
 	private String cateCode;
 	private String cateGroup;
 	private String cateName;
+	private String cateUrl;
 	private Timestamp reg_date;
 	
 	public String getCateCode() {
@@ -26,6 +27,12 @@ public class CategoryBean {
 	}
 	public void setCateName(String cateName) {
 		this.cateName = cateName;
+	}
+	public String getCateUrl() {
+		return cateUrl;
+	}
+	public void setCateUrl(String cateUrl) {
+		this.cateUrl = cateUrl;
 	}
 	public Timestamp getReg_date() {
 		return reg_date;

@@ -38,9 +38,7 @@
 		response.addCookie(cookie);
 	}
 	
-	System.out.println("121212121 : " + is_login);
 	if(is_login){
-		System.out.println("여기 들려야되");
 		bean.setMcode(mem.getMcode());
 		bean.setCcode(ccode);
 		dao.mergeCart(bean);
@@ -61,15 +59,13 @@
 			bean.setMcode(-1);
 		}			
 		
-		dao.insertCart(bean);
-		
 		for(Object o : lists) {
 			String str = String.valueOf(o);
 			int pcode = Integer.parseInt(str.substring(str.indexOf("=") + 1, str.indexOf(",")));
 			int qty = Integer.parseInt(str.substring(str.lastIndexOf("=") + 1, str.indexOf("}")));
 			bean.setPcode(pcode);
 			bean.setQty(qty);
-			dao.insertCartDetail(bean);
+			dao.insertCart(bean);
 		}
 	}
 	else {

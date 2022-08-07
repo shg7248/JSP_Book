@@ -49,6 +49,26 @@
 		form.action = url;
 		form.submit();
 	}
+	
+	function nomemSearch(opwd, email, url) {
+		
+		const form = window.document.forms[0];		
+		if(opwd.value.length == 0) {
+			
+			alert("주문비밀번호를 입력해 주세요");
+			opwd.focus();
+			return false;
+		}
+		
+		if(email.value.length == 0) {
+			alert("이메일을 입력해 주세요");
+			email.focus();
+			return false;
+		}
+		
+		form.action = url;
+		form.submit();
+	}
 </script>
 <main class=main>
 	<div class=main__inner>
@@ -92,12 +112,12 @@
 				</tr>
 				<tr>
 					<td>주문 비밀번호</td>
-					<td colspan=2><input type="text"/></td>
+					<td colspan=2><input type="password" name="opwd"/></td>
 				</tr>
 				<tr>
 					<td>이메일</td>
-					<td><input type="text"/></td>
-					<td style="position: relative;"><input class="signin-table__submit" type="submit" value="조회"/></td>
+					<td><input type="text" name="email"/></td>
+					<td style="position: relative;"><input class="signin-table__submit" type="submit" value="조회" onclick="return nomemSearch(opwd, email, '<%=contextPath %>/nomemOrderSearch.jsp')"/></td>
 				</tr>
 				<tr>
 					<td colspan=3>

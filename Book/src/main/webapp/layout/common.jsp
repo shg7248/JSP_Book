@@ -21,7 +21,7 @@
 	MemberBean mem = null;
 	if(is_login){
 		mem = (MemberBean) obj;
-	}
+	} 
 %>
 
 <link rel="stylesheet" href="<%=contextPath %>/style/reset.css">

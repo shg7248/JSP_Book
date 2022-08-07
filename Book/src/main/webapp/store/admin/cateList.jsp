@@ -17,11 +17,11 @@
 	})
 	
 	function fistCateAdd() {
-		window.open('cate_firstInsertForm.jsp', '1차 카테고리 추가', 'width=500; height=500');
+		window.open('cate_firstInsertForm.jsp', '1차 카테고리 추가', 'width=400; height=180');
 	}
 	
 	function secondCateAdd() {
-		window.open('cate_secondInsertForm.jsp?group=' + cateGroup, '2차 카테고리 추가', 'width=500; height=500');
+		window.open('cate_secondInsertForm.jsp?group=' + cateGroup, '2차 카테고리 추가', 'width=500; height=150');
 	}
 	
 	function showSecondCate(group) {
@@ -46,12 +46,19 @@
 			let html = "";
 			if(data.length == 0) {
 				html = "<tr><td class='category__content'><a href='javascript:void(0)'>카테고리가 존재하지 않습니다.</a></td></tr>";
+				html += "<tr><td class='category__addbutton'><a href='javascript:secondCateAdd()'>추가하기</a></td></tr>";
 				document.querySelector('.category__table--second tbody').innerHTML = html;
 			}
- 			data.forEach(function(ele, i) {
-	 			html += "<tr><td class='category__content'><a href='javascript:void(0)' onclick='showSecondCate("+ ele.cateCode +"')'>"+ ele.cateName +"</a></td></tr>";
-	 			document.querySelector('.category__table--second tbody').innerHTML = html;
- 			});
+			else{
+	 			data.forEach(function(ele, i) {
+		 			html += "<tr><td class='category__content'><a href='javascript:void(0)' onclick='showSecondCate("+ ele.cateCode +"')'>"+ ele.cateName +"</a></td></tr>";
+	 				if(data.length -1 == i) {
+		 				html += "<tr><td class='category__addbutton'><a href='javascript:secondCateAdd()'>추가하기</a></td></tr>";
+	 					
+	 				}
+			 		document.querySelector('.category__table--second tbody').innerHTML = html;
+	 			});
+			}
 		});
 	};
 </script>

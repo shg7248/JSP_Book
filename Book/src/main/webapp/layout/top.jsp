@@ -1,8 +1,12 @@
+<%@page import="com.movie.beans.CategoryBean"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.movie.dao.CategoryDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/layout/common.jsp" %>
+
 <script type="text/javascript">
-	function goCart() {
+	function top_goCart() {
 		fetch(getContextPath() + "/store/display/cart_before.jsp", {
 			method: "post",
 			header: {
@@ -30,7 +34,7 @@
 						<a href="<%=contextPath %>/signout.jsp">로그아웃</a>
 					</li>
 					<li class="top-nav__item top-nav__item--signin">
-						<a href="<%=contextPath %>/signinForm.jsp">마이페이지</a>
+						<a href="<%=contextPath %>/store/display/memOrderList.jsp">결제목록</a>
 					</li>				
 				<% } else { %>
 					<li class="top-nav__item top-nav__item--signin">
@@ -40,22 +44,20 @@
 						<a href="<%=contextPath %>/signupType.jsp">회원가입</a>
 					</li>
 				<% } %>
-				<li class="top-nav__item top-nav__item--help">
-					<a href="">고객센터</a>
-				</li>
 				<li class="top-nav__item top-nav__item--cart">
-					<a href="javascript:goCart()">장바구니</a>
+					<a href="javascript:top_goCart()">장바구니</a>
 				</li>
 			</ul>
 		</div>
 		<div class="header__search">
 			<div class="search">
 				<div class="search__inner">
-					<form class="search__content">
-						<select class="search__select">
-							<option>통합검색</option>
+					<form class="search__content" action="<%=contextPath %>/store/display/searchPro.jsp">
+						<select class="search__select" name="condition">
+							<option value="title">상품명</option>
+							<option value="author">저자</option>
 						</select>
-						<input type="text" class="search__input">
+						<input type="text" class="search__input" name="value">
 						<input type="submit" class="search__button">
 					</form>
 				</div>
@@ -73,18 +75,14 @@
 <nav class="nav">
 	<div class="nav__inner">
 		<ul class="nav__list">
-			<li class="nav__item nav_item--kor">
-				<a href="">국내도서</a>
+			<% 
+			CategoryDao cdao = CategoryDao.getInstance();
+			ArrayList<CategoryBean> lists = cdao.getAllCategorys();
+			for(CategoryBean bean : lists) { %>
+			<li class="nav__item">
+				<a href="<%=contextPath%>/store/display/<%=bean.getCateUrl() %>"><%=bean.getCateName() %></a>
 			</li>
-			<li class="nav__item nav_item--foreign">
-				<a href="">해외도서</a>
-			</li>
-			<li class="nav__item nav_item--best">
-				<a href="">베스트도서</a>
-			</li>
-			<li class="nav__item nav_item--new">
-				<a href="">신간도서</a>
-			</li>
+			<% } %>
 		</ul>
 	</div>
 </nav>

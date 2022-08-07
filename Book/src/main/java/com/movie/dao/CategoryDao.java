@@ -49,6 +49,7 @@ public class CategoryDao {
 				bean.setCateCode(rs.getString("CATECODE"));
 				bean.setCateGroup(rs.getString("CATEGROUP"));
 				bean.setCateName(rs.getString("CATENAME"));
+				bean.setCateUrl(rs.getString("CATEURL"));
 				bean.setReg_date(rs.getTimestamp("REG_DATE"));
 				beans.add(bean);
 			}
@@ -94,11 +95,12 @@ public class CategoryDao {
 		
 		int cnt = -1;
 		try {
-			String sql = 	"INSERT INTO BOOK_CATEGORY (CATECODE, CATEGROUP, CATENAME, REG_DATE) " +
-							"VALUES(?, NULL, ?, SYSDATE)";
+			String sql = 	"INSERT INTO BOOK_CATEGORY (CATECODE, CATEGROUP, CATENAME, CATEURL, REG_DATE) " +
+							"VALUES(?, NULL, ?, ?, SYSDATE)";
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, bean.getCateCode());
 			ps.setString(2, bean.getCateName());
+			ps.setString(3, bean.getCateUrl());
 			
 			cnt = ps.executeUpdate();
 			

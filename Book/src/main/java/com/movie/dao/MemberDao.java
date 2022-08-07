@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -11,8 +12,9 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import com.movie.beans.MemberBean;
+import com.movie.util.Paging;
 
-public class MemberDao {
+public class MemberDao implements Dao{
 	
 	private Connection conn = null;
 	PreparedStatement ps = null;
@@ -74,6 +76,7 @@ public class MemberDao {
 			if(rs.next()) {
 				bean = new MemberBean();
 				bean.setMcode(rs.getInt("mcode"));
+				bean.setId(rs.getString("id"));
 				bean.setPwd(rs.getString("pwd"));
 				bean.setName(rs.getString("name"));
 				bean.setBirth(rs.getString("birth"));
@@ -113,5 +116,69 @@ public class MemberDao {
 			ConnectionClose.close(ps, rs);
 		}
 		return is_mcode;
+	}
+
+	@Override
+	public int getCount(Paging paging) {
+		
+		int cnt = -1;
+		
+		String sql = "SELECT COUNT(*) FROM BOOK_MEMBERS WHERE "+paging.getCondition()+" LIKE ?";
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, "%"+paging.getValue()+"%");
+			
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				cnt = rs.getInt(1);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionClose.close(ps, rs);
+		}
+		return cnt;
+	}
+	
+	public ArrayList<MemberBean> getAllMembers(Paging paging) {
+		
+		ArrayList<MemberBean> beans = new ArrayList<>();
+		
+		String sql = "SELECT RANK, MCODE, ID, PWD, NAME, BIRTH, GENDER, EMAIL, PHONE, REG_DATE\r\n"
+				+ "FROM(SELECT RANK() OVER (ORDER BY MCODE DESC) RANK, MCODE, ID, PWD, NAME, BIRTH, GENDER, EMAIL, PHONE, REG_DATE \r\n"
+				+ "FROM BOOK_MEMBERS WHERE "+paging.getCondition()+" LIKE ?)\r\n"
+				+ "WHERE RANK BETWEEN ? AND ?";
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, "%"+paging.getValue()+"%");
+			ps.setInt(2, paging.getStart());
+			ps.setInt(3, paging.getEnd());
+			
+			rs = ps.executeQuery();
+			
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				MemberBean bean = new MemberBean();
+				bean.setMcode(rs.getInt("mcode"));
+				bean.setId(rs.getString("id"));
+				bean.setPwd(rs.getString("pwd"));
+				bean.setName(rs.getString("name"));
+				bean.setBirth(rs.getString("birth"));
+				bean.setGender(rs.getString("gender"));
+				bean.setEmail(rs.getString("email"));
+				bean.setPhone(rs.getString("phone"));
+				bean.setReg_date(rs.getTimestamp("reg_date"));
+				beans.add(bean);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionClose.close(ps, rs);
+		}
+		return beans;		
 	}
 }

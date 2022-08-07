@@ -13,13 +13,24 @@
 	ProductDao dao = ProductDao.getInstance();
 	ProductBean bean = dao.getProductByPcode(pcode);
 	
-	SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일");
-	Timestamp pub_date = Timestamp.valueOf(bean.getPub_date());
 %>
 <script>
 	function goCart(pcode, qty) {
+		
+		if(qty.value <= 0 || qty.value.trim() == "") {
+			alert("1개 이상 입력해야 합니다");
+			qty.select();
+			return;
+		}
+		
+		if(isNaN(qty.value)) {
+			alert("숫자만 입력해야 합니다");
+			qty.select();
+			return;
+		}
+		
 		const data = []
-		const obj = {pcode: pcode, qty: qty};
+		const obj = {pcode: pcode.value, qty: qty.value};
 		data.push(obj);
 		
 		fetch("cart_before.jsp", {
@@ -35,6 +46,17 @@
 				location.href="cart_list.jsp"
 			}
 		})
+	}
+	
+	function plus(qty) {
+		const value = Number(qty.value);
+		qty.value = value + 1;
+	}
+	
+	function minus(qty) {
+		const value = Number(qty.value);
+		if(value > 1)
+			qty.value = value - 1;
 	}
 </script>
 <style type="text/css">
@@ -97,7 +119,7 @@
 							<h2><%=bean.getTitle() %></h2>
 						</li>
 						<li class="prod-info__item prod-info__item--detailInfo">
-							<%=bean.getAuthor() + " 지음 | " + bean.getPublisher() + " | " + sdf.format(pub_date) + " 출간 | ISBN : " + bean.getIsbn()  %>
+							<%=bean.getAuthor() + " 지음 | " + bean.getPublisher() + " | " + bean.getPub_date() + " 출간 | ISBN : " + bean.getIsbn()  %>
 						</li>
 						<li class="prod-info__item prod-info__item--price">
 							정가 <%=df.format(bean.getPrice()) %> 원
@@ -110,12 +132,11 @@
 						<li class="prod-info__item prod-info__item--qty">
 							수량
 							<input type="text" name="qty" value="1" size=4>
-							<input type="button" value="+">
-							<input type="button" value="-">
+							<input type="button" value="+" onclick="plus(qty)">
+							<input type="button" value="-" onclick="minus(qty)">
 						</li>
 						<li class="prod-info__item prod-info__item--order">
-							<input type="button" value="장바구니" onclick="goCart(pcode.value, qty.value)">
-							<input type="button" value="즉시결제" >
+							<input type="button" value="장바구니" onclick="goCart(pcode, qty)">
 						</li>
 					</ul>
 				</form>

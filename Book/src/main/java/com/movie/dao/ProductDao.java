@@ -35,12 +35,13 @@ public class ProductDao implements Dao {
 	}
 	
 	@Override
-	public int getCount() {
+	public int getCount(Paging paging) {
 		int cnt = -1;
 		
 		try {
-			String sql = "SELECT COUNT(*) FROM BOOK_PRODUCTS";
+			String sql = "SELECT COUNT(*) FROM BOOK_PRODUCTS WHERE " + paging.getCondition() + " LIKE ?";
 			ps = conn.prepareStatement(sql);
+			ps.setString(1, "%" + paging.getValue() + "%");
 			
 			rs = ps.executeQuery();
 			
@@ -53,7 +54,6 @@ public class ProductDao implements Dao {
 		} finally {
 			ConnectionClose.close(ps, rs);
 		}
-		
 		return cnt; 
 	}
 	
@@ -98,12 +98,13 @@ public class ProductDao implements Dao {
 						+ "WHERE EXISTS (SELECT PCODE\r\n"
 						+ "FROM (SELECT PCODE \r\n"
 						+ "FROM (SELECT PCODE, RANK() OVER (ORDER BY PCODE DESC) RANK \r\n"
-						+ "FROM BOOK_PRODUCTS)\r\n"
-						+ "WHERE RANK BETWEEN ? AND ?) B WHERE A.PCODE = B.PCODE)\r\n"
-						+ "ORDER BY PCODE DESC";
+						+ "FROM BOOK_PRODUCTS"
+						+ " WHERE "+ paging.getCondition() +" LIKE ? "
+						+ ") WHERE RANK BETWEEN ? AND ?) B WHERE A.PCODE = B.PCODE) ORDER BY PCODE DESC";
 			ps = conn.prepareStatement(sql);
-			ps.setInt(1, paging.getStart());
-			ps.setInt(2, paging.getEnd());
+			ps.setString(1, "%"+ paging.getValue() +"%");
+			ps.setInt(2, paging.getStart());
+			ps.setInt(3, paging.getEnd());
 			
 			rs = ps.executeQuery();
 			beans = putProductBeans(rs);
@@ -183,6 +184,44 @@ public class ProductDao implements Dao {
 		return beans;
 	}
 	
+	public int updateProduct(ProductBean bean) {
+		
+		int cnt = -1;
+		
+		try {
+			String sql = "UPDATE BOOK_PRODUCTS SET TITLE = ?, AUTHOR = ?, PUBLISHER = ?, ISBN = ?, PUB_DATE = ?, QTY = ?, PRICE = ?, SALE = ?, CATECODE = ?, IDX = ?, CONTENT = ?";
+			if(bean.getImage() != null) {
+				sql += ", IMAGE = ?";
+			}
+			sql += " WHERE PCODE = ?";
+			
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, bean.getTitle());
+			ps.setString(2, bean.getAuthor());
+			ps.setString(3, bean.getPublisher());
+			ps.setString(4, bean.getIsbn());
+			ps.setString(5, bean.getPub_date());
+			ps.setInt(6, bean.getQty());
+			ps.setInt(7, bean.getPrice());
+			ps.setInt(8, bean.getSale());
+			ps.setString(9, bean.getCatecode());
+			ps.setString(10, bean.getIdx());
+			ps.setString(11, bean.getContent());
+			if(bean.getImage() != null) {
+				ps.setString(12, bean.getImage());
+				ps.setInt(13, bean.getPcode());
+			}
+			else {
+				ps.setInt(12, bean.getPcode());
+			}
+			cnt = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return cnt;
+	}
+	
 	private ProductBean putProductBean(ResultSet rs) throws SQLException {
 		
 		ProductBean bean = null;
@@ -200,7 +239,7 @@ public class ProductDao implements Dao {
 			bean.setPrice(rs.getInt("price"));
 			bean.setSale(rs.getInt("sale"));
 			bean.setCatecode(rs.getString("catecode"));
-			bean.setPub_date(String.valueOf(rs.getTimestamp("pub_date")));
+			bean.setPub_date(String.valueOf(rs.getDate("pub_date")));
 			bean.setImage(rs.getString("image"));
 			bean.setReg_date(String.valueOf(rs.getTimestamp("reg_date")));
 		}

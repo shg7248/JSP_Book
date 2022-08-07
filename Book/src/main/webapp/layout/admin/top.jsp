@@ -72,7 +72,7 @@
 	<div class="header__inner">
 		<div class="header__logo">
 			<div class="logo">
-				<a href="#" class="logo__link">
+				<a href="<%=contextPath %>/main.jsp" class="logo__link">
 					<img src="<%=contextPath %>/images/logo_song_white.png">
 				</a>
 			</div>
@@ -83,14 +83,14 @@
 				<li class="nav__item <%if (filename.equals("cateList.jsp")) { %>on<% } %>">
 					<a href="<%=contextPath %>/store/admin/cateList.jsp" class="nav__link">카테고리 관리</a>
 				</li>
-				<li class="nav__item <%if (filename.equals("dsfdsf")) { %>on<% } %>">
-					<a href="" class="nav__link">회원목록</a>
+				<li class="nav__item <%if (filename.contains("mem_list.jsp")) { %>on<% } %>">
+					<a href="<%=contextPath %>/store/admin/mem_list.jsp" class="nav__link">회원목록</a>
 				</li>
-				<li class="nav__item <%if (filename.equals("prod_List.jsp") || filename.equals("prod_insertForm.jsp")) { %>on<% } %>">
+				<li class="nav__item <%if (filename.equals("prod_List.jsp") || filename.equals("prod_insertForm.jsp") || filename.equals("prod_update.jsp") || filename.contains("prod_updateForm.jsp")) { %>on<% } %>">
 					<a href="<%=contextPath %>/store/admin/prod_List.jsp" class="nav__link">상품정보</a>
 				</li>
-				<li class="nav__item">
-					<a href="" class="nav__link">판매목록</a>
+				<li class="nav__item <%if (filename.equals("ord_list.jsp")) { %>on<% } %>">
+					<a href="<%=contextPath %>/store/admin/ord_list.jsp" class="nav__link">판매목록</a>
 				</li>
 			</ul>
 		</div>

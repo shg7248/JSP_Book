@@ -1,5 +1,5 @@
 <%@page import="java.text.DecimalFormat"%>
-<%@page import="com.movie.beans.CartDetailBean"%>
+<%@page import="com.movie.beans.CartBean"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.movie.dao.CartDao"%>
 <%@page import="com.movie.beans.CartBean"%>
@@ -9,14 +9,14 @@
     pageEncoding="UTF-8"%>
 <%@ include file="/layout/top.jsp" %>
 <%
-	CartDao dao = CartDao.getInstance();
+CartDao dao = CartDao.getInstance();
 	String condition = null;
 	String value = null;
 	
 	for(Cookie cookie : cookies) {
 		if(cookie.getName().equals("ccode")) {
-			value = cookie.getValue();
-			break;
+	value = cookie.getValue();
+	break;
 		}
 	}
 	
@@ -24,9 +24,6 @@
 		condition = "ccode";
 	}
 	else { // 회원일 경우
-		if(value != null) { // ccode라는 쿠키가 있을 경우 MCODE를 회원의 MCODE로 업데이트
-			String mcode = String.valueOf(mem.getMcode());
-		}
 		condition = "mcode";
 		value = String.valueOf(mem.getMcode());
 		
@@ -37,20 +34,117 @@
 		response.addCookie(cookie);
 	}
 	
-	ArrayList<CartDetailBean> beans= dao.getCateByCondition(condition, value, is_login);
+	ArrayList<CartBean> beans= dao.getCateByCondition(condition, value, is_login);
 %>
-<style>
+<style type="text/css">
 	.info {
 		width: 100%;
 		height: 120px;
 		border: 1px solid black;
 	}
-	.cart__list {
+	.cart__title{
+		padding: 20px 0;
+		font-size: 20px;
+		font-weight: bold;
+	}
+	.cart__table {
 		width: 100%;
 		text-align: center;
 		font-size: 11px;
 	}
+	.cart__list {
+	
+	}
+	.cart__list .price {
+		color: red;
+	}
+	.cart__list td, .cart__list th {
+		padding: 10px;
+		border-bottom: 1px solid #DCDCDC;
+	}
+	.cart__total {
+		text-align: right;
+		font-size: 20px;
+	}
+	.cart__delbtn {
+		float: left;
+	}
+	.cart__orderbtn {
+		float: right;
+	}
+	.cart__button a {
+		width: 100px;
+		height: 30px;
+		background: #00BFFF;
+		line-height: 30px;
+		font-size: 16px;
+		color: white;
+	}
 </style>
+<script type="text/javascript">
+	function allcheck(ch) {
+		const rowcheck = document.querySelectorAll('input[name="rowcheck"]');
+		rowcheck.forEach(function(ele, i) {
+			if(ch.checked) {
+				ele.checked = true;
+			}
+			else {
+				ele.checked = false;
+			}
+		});
+	}
+	
+	function alldelete() {
+		
+		const rowcheck = document.querySelectorAll('input[name="rowcheck"]:checked');
+		
+		if(rowcheck.length == 0) {
+			alert("상품을 한개라도 선택하세요");
+			return;
+		}
+		
+		const form = document.createElement("form");
+		form.method = "post";
+		form.action = "cart_allDeletePro.jsp";
+	
+		rowcheck.forEach(function(ele, i) {
+			let hiddenField = document.createElement("input");
+			hiddenField.setAttribute("type", "hidden");
+			hiddenField.setAttribute("name", "cacode");
+			hiddenField.setAttribute("value", ele.value);
+			form.appendChild(hiddenField);
+		});
+		
+		document.body.append(form);
+		form.submit();
+		
+	}
+	
+	function cartOrders() {
+		
+		const cacode = document.querySelectorAll("input[name='cacode']");
+		
+		if(cacode.length == 0) {
+			alert("장바구니에 상품이 존재하지 않습니다.");
+			return;
+		}
+		
+		const form = document.createElement("form");
+		form.method = "post";
+		form.action = "cart_orders.jsp";
+		
+		cacode.forEach(function(ele, i) {
+			let hiddenField = document.createElement("input");
+			hiddenField.setAttribute("type", "hidden");
+			hiddenField.setAttribute("name", "cacode");
+			hiddenField.setAttribute("value", ele.value);
+			form.appendChild(hiddenField);
+		});
+		
+		document.body.append(form);
+		form.submit();
+	}
+</script>
 <main class="main">
 	<div class="main__inner">
 		<div class="main__info">
@@ -61,12 +155,12 @@
 		<div class="main__cart">
 			<div class="cart">
 				<div class="cart__title">
-					<strong><%=beans.size() %>개의 상품이 장바구니에 담겨져 있습니다</strong>
+					<strong><%=beans.size()%>개의 상품이 장바구니에 담겨져 있습니다</strong>
 				</div>
-				<table class="cart__list">
+				<table class="cart__table">
 					<thead>
-						<tr class="cart__item">
-							<th><input type="checkbox"></th>
+						<tr class="cart__list">
+							<th><input type="checkbox" onclick="allcheck(this)"></th>
 							<th width=30%>상품명</th>
 							<th>정가</th>
 							<th>판매가</th>
@@ -77,33 +171,59 @@
 					</thead>
 					<tbody>
 						<%
-							for(CartDetailBean bean : beans) {
+						int totalPrice = 0;
+						int totalPoint = 0;
+						if(beans.size() == 0) {
 							%>
-							<tr class="cart__item">
-								<td><input type="checkbox"></td>
+								<tr class="cart__list">
+									<td colspan=7 class="">담겨져있는 상품이 없습니다</td>
+								</tr>
+							<%
+						}
+						else {
+						for(CartBean bean : beans) {
+							totalPrice += bean.getTotalPrice();
+							totalPoint += bean.getTotalPoint();
+						%>
+							<tr class="cart__list">
+								<td><input type="checkbox" name="rowcheck" value="<%=bean.getCacode() %>"></td>
 								<td><%=bean.getTitle() %></td>
 								<td><%=df.format(bean.getPrice()) %></td>
 								<td><%=df.format(bean.getSalePrice()) %>원</td>
 								<td>
-									<form>
-										<input type="text" value="<%=bean.getQty() %>" size=4>
-										<input type="submit" value="수정" />
+									<form method="post" action="cart_updatePro.jsp">
+										<input type="hidden" name="cacode" value="<%=bean.getCacode() %>">
+										<input type="text" name="qty" value="<%=bean.getQty() %>" size=4>
+										<input type="submit" value="수정"/>
 									</form>
 								</td>
 								<td>
-									<%=df.format(bean.getTotalPrice()) %>원
+									<span class="price"><%=df.format(bean.getTotalPrice()) %></span> 원
 								</td>
 								<td>
 									<%=df.format(bean.getTotalPoint()) %>포인트
 								</td>
 							</tr>
 							<%
-							}
+							}}
 						%>
 					</tbody>
 					<tfoot>
-						<tr class="cart__item">
-							<td colspan=7><input type="button" value="주문하기"></td>
+						<tr class="cart__list">
+							<td colspan=7 class="cart__totalPrice cart__total">
+								총 금액 : <%=df.format(totalPrice) %> 원
+							</td>
+						</tr>
+						<tr class="cart__list">
+							<td colspan=7 class="cart__totalPoint cart__total">
+								총 포인트 : <%=df.format(totalPoint) %> 원
+							</td>
+						</tr>
+						<tr class="cart__list">
+							<td colspan=7 class="cart__button">
+								<a href="javascript:alldelete()" class="cart__delbtn">선택삭제</a>
+								<a href="javascript:cartOrders()" class="cart__orderbtn" >주문하기</a>
+							</td>
 						</tr>
 					</tfoot>
 				</table>
